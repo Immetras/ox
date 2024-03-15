@@ -1,0 +1,94 @@
+----- index.html ------
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .hide {
+            display: none;
+        }
+
+        .show {
+            display: block;
+        }
+    </style>
+    <script>
+        function send() {
+            let al = document.getElementById("al");
+            al.className = "show";
+            let name = document.getElementById("name").value;
+            let xhttp = new XMLHttpRequest();
+            xhttp.open("POST", "ajax.php", true);
+
+            xhttp.onreadystatechange = function () {
+                console.log(this.readyState);
+                if (this.readyState == 4 && this.status == 200) {
+                    let res = this.responseText;
+                    let ob = JSON.parse(res);
+                    console.log(ob);
+                    al.className = "hide";
+                }
+            };
+
+            xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xhttp.send("name=" + name + "&city=" + encodeURIComponent('Krakó∑ąśłó'));
+        }
+
+        async function gettt() {
+            let data = await fetch("https://mendela.pl/egzamin.php?ocena=5");
+            let ob = await data.json();
+            console.log(ob);;
+        }
+    </script>
+</head>
+
+<body onload="gettt()">
+    <input type="text" id="name"><button onclick="send();">Send</button>
+    <img class="hide" id="al" src="https://www.containerrental.com/public/img/ajax-loader/map-loader.gif" alt="">
+</body>
+
+</html>
+
+
+
+------ ajax.php ------
+<?php
+//print_r($_POST); // $_GET   $_REQUEST
+$_POST['planet'] = 'Earth';
+sleep(2); // 2s
+echo json_encode($_POST);
+
+
+
+
+------ session_get.php ------
+<?php
+session_start();
+print_r($_SESSION);
+
+
+
+
+
+----- session_off.php -----
+<?php
+session_start();
+
+
+
+session_destroy();
+
+
+
+
+
+
+
+----- session_on.php ------
+<?php
+session_start();
+$_SESSION['who'] = 'X'; // tylko stringi lub numbery!!!
+echo session_id();
